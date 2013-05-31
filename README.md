@@ -73,6 +73,12 @@ They will be resized and stretched to the dimensions specified in the template j
 Also in the classifier properties, you can set which classifier to use
 by specifying its directory for the training_data_uri property.
 
+## Additional developer info:
+
+[JSONFormat.md](JSONFormat.md)
+
+[processViaJSON.md](processViaJSON.md)
+
 Source file information
 =======================
 
