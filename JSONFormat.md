@@ -69,6 +69,7 @@ Below is a description of the JSON structure. Annotations added to the output ar
 			"value" : "1111111111"
 		}
 	],
+	
 	//Annotation
 	//The form might be scaled to a different size when processed.
 	//If that is the case the scaling factor is recorded here.
@@ -81,5 +82,35 @@ Below is a description of the JSON structure. Annotations added to the output ar
 	"timestamp" : "2013-05-30.12:02:00",
 	"height" : 1088,
 	"width" : 832
+	"classifier" : {
+		//Classification labels
+		//can be mapped to different
+		//values
+		"classification_map": {
+			"filled": true,
+			"partiallyfilled": true,
+		},
+		//If the classiciation label is not
+		//in the map the default classification
+		//is used.
+		"default_classification": false,
+		//The directory contianing the classifier
+		//training examples
+		"training_data_uri": "bubbles",
+		"classifier_height": 28,
+		"classifier_width": 20,
+		//If non zero the item locations
+		//will be refined to a new location
+		//within the given pixel radius
+		"alignment_radius": 2.0,
+		"advanced": {
+			//If your trainin data is symetric
+			//you can get more training examples
+			//for free by flipping it.
+			"flip_training_data": false,
+			//Parameter for PCA SVM classifier.
+			"eigenvalues" : 13
+		}
+	}
 }
 ```
