@@ -9,27 +9,27 @@ Below is a description of the JSON structure:
 	[
 		//Each object in this array represents a field.
 		{
-      //If the fields items have string classifications
-      //they are joined into a single string
-      //using this delimiter to form the filed value.
+      			//If the fields items have string classifications
+      			//they are joined into a single string
+      			//using this delimiter to form the filed value.
 			"delimiter" : ", ",
-      //The label of a field shown in collect
+      			//The label of a field shown in collect
 			"label" : "name",
-      //The name of the field that will be used for backend storage
-      //When exporting to Collect a "q_" prefix is added
-      //and all spaces are replaced with underscores.
+      			//The name of the field that will be used for backend storage
+      			//When exporting to Collect a "q_" prefix is added
+      			//and all spaces are replaced with underscores.
 			"name" : "1",
 			"segments" : 
 			[
 				//A field can have multiple segments,
-        //this can help alignment in some cases,
-        //but if I were to redesing this I think
-        //a single segments might be better.
+       				//this can help alignment in some cases,
+       				//but if I were to redesing this I think
+				//a single segments might be better.
 				{
-          //This sets whether the segment should be aligned by looking
-          //for a surrouding border.
+         				 //This sets whether the segment should be aligned by looking
+          				//for a surrouding border.
 					"align_segment" : true,
-          //This is the path the segment image was saved to.
+          				//This is the path the segment image was saved to.
 					"image_path" : "output/test/segments/name_image_0.jpg",
 					"items" : 
 					[
@@ -44,8 +44,8 @@ Below is a description of the JSON structure:
 							"item_y" : 22.50
 						}
 					],
-          //quad is an annotation that records the corners of the
-          //aligned segment.
+ 					//quad is an annotation that records the corners of the
+		  			//aligned segment.
 					"quad" : 
 					[
 						[ 31, 109 ],
@@ -59,17 +59,17 @@ Below is a description of the JSON structure:
 					"segment_y" : 107
 				}
 			],
-      //The field's type, mainly for the benefit of Collect.
+			//The field's type, mainly for the benefit of Collect.
 			"type" : "string",
-      //An annotation containing the fields value.
+			//An annotation containing the fields value.
 			"value" : "1111111111"
 		}
 	],
-  //The form might be scaled to a different size when processed.
-  //If that is the case the scaling factor is recorded here.
+	//The form might be scaled to a different size when processed.
+	//If that is the case the scaling factor is recorded here.
 	"form_scale" : 1.0,
-  "templatePath" : "test/template.json"
-  "output_path" : "output/test/",
+	"templatePath" : "test/template.json"
+	"output_path" : "output/test/",
 	"timestamp" : "2013-05-30.12:02:00",
 	"height" : 1088,
 	"width" : 832
