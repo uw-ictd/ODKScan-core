@@ -20,6 +20,17 @@ ALL_SRCS := $(CORE_SRCS) StatCollector.cpp
 ALL_HEADERS := $(CORE_HEADERS) StatCollector.h configuration.h
 ALL_OBJS := $(CORE_OBJS) StatCollector.o $(JSON_PARSER_OBJS) $(BIGINT_OBJS) $(ZXING_OBJS)
 
+ifdef $(DEBUG)
+CFLAGS +=\
+-D DEBUG_PROCESSOR\
+-D DEBUG_ALIGN_IMAGE\
+-D SEGMENT_OUTPUT_DIRECTORY=debug_segment_images/\
+-D TRAINING_IMAGE_ROOT "training_examples"\
+-D DEBUG_CLASSIFIER\
+-D OUTPUT_BUBBLE_IMAGES
+#-D ALWAYS_COMPUTE_TEMPLATE_FEATURES
+endif
+
 #The OPENCV_INCLUDES will probably need to be adjusted if you aren't running this on a linux system.
 #Even then, pkg-config might not be set up.
 #Also, you might need to add this to your .bashrc
@@ -29,7 +40,6 @@ OPENCV_INCLUDES := `pkg-config opencv --cflags --libs`
 INCLUDES := $(OPENCV_INCLUDES)\
 -I./jsoncpp-src-0.5.0/include\
 -I./src -I./\
--lboost_filesystem -lboost_system\
 -I./zxing/core/src -I./zxing/cli/src
 
 ODKScan: ODKScan.run
@@ -49,6 +59,7 @@ endif
 ifndef $(EXPECTED_JSON)
 EXPECTED_JSON := $(INPUT_FOLDER)/output.json
 endif
+Experiment: INCLUDES += -lboost_filesystem -lboost_system
 Experiment: tests/Experiment.run
 	@rm -rf $(OUTPUT_FOLDER)
 	@mkdir $(OUTPUT_FOLDER)
@@ -73,7 +84,7 @@ zxing: zxing/cli/main.run
 #does compiling
 .PRECIOUS: %.o
 %.o: %.cpp $(ALL_HEADERS)
-	g++ -Wall -c $< -o $@ $(INCLUDES)
+	g++ -Wall -c $< -o $@ $(INCLUDES) $(CFLAGS)
 
 .IGNORE: clean
 clean:
@@ -89,3 +100,4 @@ clean:
 #http://www.gnu.org/s/hello/manual/make/Conditional-Syntax.html#Conditional-Syntax
 #http://en.wikipedia.org/wiki/Makefile
 #http://stackoverflow.com/questions/2214575/passing-arguments-to-make-run
+#http://stackoverflow.com/questions/5302390/is-it-possible-to-define-c-macro-in-makefile
