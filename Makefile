@@ -20,15 +20,22 @@ ALL_SRCS := $(CORE_SRCS) StatCollector.cpp
 ALL_HEADERS := $(CORE_HEADERS) StatCollector.h configuration.h
 ALL_OBJS := $(CORE_OBJS) StatCollector.o $(JSON_PARSER_OBJS) $(BIGINT_OBJS) $(ZXING_OBJS)
 
-ifdef $(DEBUG)
-CFLAGS +=\
+#You can use debug mode by cleaning then remaking
+#with a DEBUG=Something command-line parameter
+ifdef DEBUG
+CFLAGS := \
 -D DEBUG_PROCESSOR\
 -D DEBUG_ALIGN_IMAGE\
--D SEGMENT_OUTPUT_DIRECTORY=debug_segment_images/\
--D TRAINING_IMAGE_ROOT "training_examples"\
+-D SEGMENT_OUTPUT_DIRECTORY="debug_segment_images/"\
+-D TRAINING_IMAGE_ROOT="training_examples"\
 -D DEBUG_CLASSIFIER\
 -D OUTPUT_BUBBLE_IMAGES
 #-D ALWAYS_COMPUTE_TEMPLATE_FEATURES
+endif
+ifndef DEBUG
+CFLAGS := \
+-D DEBUG_PROCESSOR\
+-D DEBUG_ALIGN_IMAGE
 endif
 
 #The OPENCV_INCLUDES will probably need to be adjusted if you aren't running this on a linux system.
@@ -45,8 +52,12 @@ INCLUDES := $(OPENCV_INCLUDES)\
 ODKScan: ODKScan.run
 	@echo "Made executable ODKScan.run"
 
+#The Experiment target is for running the scan pipeline on a bunch of images
+#then reporting the results.
 #Example call:
 #make Experiment TEMPLATE=assets/form_templates/checkbox_test_form INPUT_FOLDER=example_input/checkbox_test
+#Notes:
+#-Requires boost (to install on ubuntu: sudo apt-get install libboost-all-dev)
 ifndef $(INPUT_FOLDER)
 INPUT_FOLDER := example_input
 endif
@@ -69,21 +80,24 @@ Experiment: tests/Experiment.run
 	@mkdir bubble_images
 	./$< $(TEMPLATE) $(INPUT_FOLDER) $(OUTPUT_FOLDER) $(EXPECTED_JSON)
 
+#When debugging, it might be preferable to run the executable with gdb:
 #gdb --args $< $(TEMPLATE) $(INPUT_FOLDER) $(OUTPUT_FOLDER) $(EXPECTED_JSON)
 
 Experiment2: tests/Experiment2.run
 	./$< assets/form_templates/moz_revised tests/MozExperiment tests/MozExperiment_out
 
+#A test for zxing compilation
 zxing: zxing/cli/main.run
 	./$< 
 
 #does linking
 %.run: %.cpp $(ALL_SRCS) $(ALL_OBJS) $(ALL_HEADERS)
-	g++ -g -o $@ $< $(ALL_OBJS) $(INCLUDES)
+	g++ -g -o $@ $< $(ALL_OBJS) $(INCLUDES) $(CFLAGS)
 
 #does compiling
 .PRECIOUS: %.o
 %.o: %.cpp $(ALL_HEADERS)
+	@echo $(CFLAGS)
 	g++ -Wall -c $< -o $@ $(INCLUDES) $(CFLAGS)
 
 .IGNORE: clean
