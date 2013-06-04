@@ -49,6 +49,9 @@ INCLUDES := $(OPENCV_INCLUDES)\
 -I./src -I./\
 -I./zxing/core/src -I./zxing/cli/src
 
+#Only include boost for experiments so it doesn't always have to be installed.
+Experiment MozExperiment: INCLUDES += -lboost_filesystem -lboost_system
+
 ODKScan: ODKScan.run
 	@echo "Made executable ODKScan.run"
 
@@ -59,18 +62,17 @@ ODKScan: ODKScan.run
 #Notes:
 #-Requires boost (to install on ubuntu: sudo apt-get install libboost-all-dev)
 ifndef $(INPUT_FOLDER)
-INPUT_FOLDER := example_input
+INPUT_FOLDER := example_input/scanExample
 endif
 ifndef $(OUTPUT_FOLDER)
 OUTPUT_FOLDER := output
 endif
 ifndef $(TEMPLATE)
-TEMPLATE := assets/form_templates/example
+TEMPLATE := assets/form_templates/scanExample
 endif
 ifndef $(EXPECTED_JSON)
 EXPECTED_JSON := $(INPUT_FOLDER)/output.json
 endif
-Experiment: INCLUDES += -lboost_filesystem -lboost_system
 Experiment: tests/Experiment.run
 	@rm -rf $(OUTPUT_FOLDER)
 	@mkdir $(OUTPUT_FOLDER)
@@ -83,7 +85,9 @@ Experiment: tests/Experiment.run
 #When debugging, it might be preferable to run the executable with gdb:
 #gdb --args $< $(TEMPLATE) $(INPUT_FOLDER) $(OUTPUT_FOLDER) $(EXPECTED_JSON)
 
-Experiment2: tests/Experiment2.run
+#Run the scan pipeline on the data collected in Mozambique
+#Note: this data is not included in the repository.
+MozExperiment: tests/Experiment2.run
 	./$< assets/form_templates/moz_revised tests/MozExperiment tests/MozExperiment_out
 
 #A test for zxing compilation
@@ -102,7 +106,6 @@ zxing: zxing/cli/main.run
 
 .IGNORE: clean
 clean:
-	rm -rf debug_segment_images
 	rm $(ALL_OBJS)
 	rm zxing/cli/main.run
 	rm tests/*.run
