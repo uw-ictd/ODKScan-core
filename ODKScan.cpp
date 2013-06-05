@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 	Processor myProcessor("assets/");
 	if(argc == 1) {
 		string result = myProcessor.processViaJSON(argv[1]);
-		cout << "<=== RESULT ===>" << endl << result << endl;
+		cout << endl << "<======= RESULT =======>" << endl << result << endl;
 		return 0;
 	}
 
